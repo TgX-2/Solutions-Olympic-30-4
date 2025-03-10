@@ -33,10 +33,6 @@ void process() {
     }
 
     bfs(m, n);
-
-    FOR(i, 5, m) FOR(j, 5, n) cout << cnt[i][j] << " \n"[j == n];
-    cout __ ;
-
     while(q--) {
         int x, y; cin >> x >> y;
         cout << cnt[x][y] __ ;

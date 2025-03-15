@@ -26,6 +26,7 @@ void bfs() {
     while(!q.empty()) {
         array<int, 3> top = q.top(); q.pop();
         int Len = top[0], Cost = top[1], Node = top[2];
+
         if (vis[Node]) continue;
         if (cost >= Len) {
             cost += Cost;
@@ -38,18 +39,21 @@ void bfs() {
     }
 }
 
-int dfs(int u) {
-    int ans = 0;
+int cnt = 0;
+bool vis2[maxn];
+
+
+void dfs(int u) {
+    cnt++;
     for(const pair<int, int> &val : g[u]) {
         int v = val.fi, w = val.se;
         if (vis[v]) continue;
+        if (vis2[v]) continue;
 
         if (w > cost) continue;
-        vis[v] = 1;
-        maxi(ans, dfs(v) + 1);
-        vis[v] = 0;
+        vis2[v] = 1;
+        dfs(v);
     }
-    return ans;
 }
 
 void process() {
@@ -60,9 +64,8 @@ void process() {
         g[u].pb({v, w});
         g[v].pb({u, w});
     }
+    
     bfs();
-
-
 
     int ans = 0;
 
@@ -74,13 +77,16 @@ void process() {
         }
 
         for(const int &val : candidate) {
-            vis[val] = 1;
-            maxi(ans, dfs(val) + 1);
-            vis[val] = 0;
+            FOR(i, 1, n) vis2[i] = 0;
+            vis2[val] = 1;
+            cnt = 0;
+            dfs(val);
+            maxi(ans, cnt);
+            vis2[val] = 0;
         }
     }
 
 
     FOR(i, 1, n) ans += vis[i];
-    cout << min(n, ans);
+    cout << ans;
 }

@@ -7,34 +7,39 @@ int n, m, k, q;
 
 bool is[maxn][maxn];
 int cnt[maxn][maxn];
-void bfs(int x, int y) {
-    queue<pair<int, int>> q;
-    q.push({x, y});
-    cnt[x][y] = 1;
-    while(!q.empty()) {
-        pair<int, int> top = q.front(); q.pop();
-        int x = top.fi, y = top.se;
-        FOR(i, 0, 3) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 or ny < 1 or nx > m or ny > n or is[nx][ny]) continue;
-            cnt[nx][ny] += cnt[x][y];
-            cnt[nx][ny] %= mod;
-            q.push({nx, ny});
-        }
+
+int dfs(int u, int v) {
+    if (u < 1 or u > m) return 0;
+    if (v < 1 or v > n) return 0;
+
+    int &ans = cnt[u][v];
+    if (ans != -1) return ans;
+
+    ans = 0;
+    FOR(i, 0, 3) {
+        int nx = u - dx[i];
+        int ny = v - dy[i];
+
+        ans += dfs(nx, ny);
+        ans %= mod;
     }
+
+    return ans;
 }
 
 void process() {
     cin >> m >> n >> k >> q;
+
+    FOR(i, 1, m) FOR(j, 1, n) cnt[i][j] = -1;
+    cnt[m][n] = 1;
     FOR(i, 1, k) {
         int x, y; cin >> x >> y;
         is[x][y] = 1;
+        cnt[x][y] = 0;
     }
 
-    bfs(m, n);
     while(q--) {
         int x, y; cin >> x >> y;
-        cout << cnt[x][y] __ ;
+        cout << dfs(x, y) __ ;
     }
 }

@@ -1,5 +1,5 @@
 const int maxn = 1e5+7;
-vector<pair<int, int> g[maxn];
+vector<pair<int, int>> g[maxn];
 int n, m, k, p = intmax, cnt = 0;
 bool vis[maxn];
 
